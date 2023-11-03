@@ -1,9 +1,13 @@
 package ui;
+import model.Comanda;
 import model.MagazinOnline;
 import model.Produs;
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
@@ -38,11 +42,71 @@ public class Menu {
                     }
                     break;
                 case 2:
+                    assert magazinOnline != null;
+                    afiseazaProdusele(magazinOnline.getListaProduse());
+
+                    if(magazinOnline.getListaProduse() == null){
+                        choice = 3;
+                        break;
+                    }
+
                     System.out.println(" ");
                     System.out.println("Selectia curenta de produse: ");
 
-                    assert magazinOnline != null;
-                    afiseazaProdusele(magazinOnline.getListaProduse());
+                    System.out.println(" ");
+                    System.out.println("Clientul nostru stapanul nostru!");
+                    System.out.println("Doresti sa comanzi un produs?");
+                    System.out.println("0 - NU. Magazinul se va inchide.");
+                    System.out.println("1 - DA. Mergi catre comanda.");
+                    System.out.print("Introdu alegerea: ");
+
+                    int clientChoice = scanner.nextInt();
+                    switch (clientChoice) {
+                        case 0:
+                            choice = 3;
+                            break;
+                        case 1:
+                            System.out.println(" ");
+                            System.out.println("NOMENCLATOR COMANDA NOUA");
+                            System.out.println("Introduceti id-ul produselor pe care doriti sa le comandati:");
+
+                            ArrayList<Produs> produseComandate = new ArrayList<Produs>();
+                            while (true) {
+                                try {
+                                    System.out.print("Introduceti id-ul produsului pentru comanda: ");
+                                    if (scanner.hasNextInt()) {
+                                        int idProdus = scanner.nextInt();
+                                        Produs produsGasit = magazinOnline.cautaProdus(idProdus);
+
+                                        if(produsGasit != null){
+                                            produseComandate.add(produsGasit);
+                                            System.out.println(" ");
+                                            System.out.println("Am adaugat acest produs la comanda: ");
+                                            System.out.println(produsGasit.toString());
+                                        }
+                                    } else {
+                                        String input = scanner.next();
+                                        if (input.equalsIgnoreCase("stop")) {
+                                            break;
+                                        } else {
+                                            System.out.println("Introducere invalida. Va rugam sa introduceti numere intregi sau 'stop' pentru a incheia.");
+                                        }
+                                    }
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Introducere invalidă. Vă rugăm să introduceți numere întregi valide sau 'stop' pentru a încheia.");
+                                    scanner.next();
+                                }
+                            }
+
+                            Comanda comandaNoua = new Comanda(LocalDate.now(), produseComandate);
+                            System.out.println(" ");
+                            System.out.println("Checkout comanda:");
+                            System.out.println(comandaNoua.toString());
+                            System.out.println("Doriti sa efectuati comanda in valoare de " + 3000 + "lei ?");
+                            System.out.println("0. Nu");
+                            System.out.println("1. Da");
+                    }
+
                     break;
                 case 3:
                     System.out.println("La revedere!");
@@ -63,8 +127,9 @@ public class Menu {
             System.out.println(" ");
             System.out.println("Meniu Admin:");
             System.out.println("1. Adauga produs nou");
-            System.out.println("2. Reseteaza selectia de produse");
-            System.out.println("3. Inapoi");
+            System.out.println("2. Sterge un produs");
+            System.out.println("3. Reinitializeaza selectia de produse");
+            System.out.println("4. Logout admin");
             System.out.print("Alege o optiune: ");
             adminChoice = scanner.nextInt();
 
@@ -87,20 +152,27 @@ public class Menu {
                     System.out.println("Produsul a fost adaugat cu succes.");
                     break;
                 case 2:
-                    magazinOnline.initialData();
-                    adminChoice = 3;
+                    System.out.println("Ce produs doresti sa stergi?");
+                    System.out.print("ID produs de sters: ");
+
+                    magazinOnline.stergeProdus(scanner.nextInt());
                     break;
                 case 3:
-                    System.out.println("Revenire la meniul principal.");
+                    magazinOnline.initialData();
                     break;
                 default:
                     System.out.println("Optiune invalida. Incearca din nou.");
             }
-        } while (adminChoice!=3);
+        } while (adminChoice!=4);
 
     }
 
     public static void afiseazaProdusele(ArrayList<Produs> listaProduse) {
+        if(listaProduse == null){
+            System.out.println("Lista de produse este nula!");
+            return;
+        }
+
         System.out.println("Lista Produse:");
 
         for (Produs produs : listaProduse) {

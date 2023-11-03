@@ -10,11 +10,6 @@ public class MagazinOnline implements Serializable{
     int[] stocProduse;
     ArrayList<Produs> listaProduse;
 
-    private MagazinOnline() {
-        this.stocProduse = new int[10];
-        this.listaProduse = new ArrayList<Produs>();
-    }
-
     public static MagazinOnline getInstance() {
         if (instance == null) {
             instance = new MagazinOnline();
@@ -43,7 +38,9 @@ public class MagazinOnline implements Serializable{
     }
 
     public void adaugaProdus(Produs produs, int cantitate) {
+        System.out.println("Dimensiune lista produse inainte: " +listaProduse.size());
         listaProduse.add(produs);
+        System.out.println("Dimensiune lista produse dupa: " +listaProduse.size());
 
         int[] newStocProduse = new int[listaProduse.size()];
 
@@ -55,12 +52,32 @@ public class MagazinOnline implements Serializable{
 
         stocProduse = newStocProduse;
 
-        stocProduse[produs.getId()] = cantitate;
+        System.out.println("stoc produse: " + stocProduse.toString());
     }
 
-    public void stergeProdus(Produs produs, int cantitate) {
-//        stocProduse[produs.getId()][produs.getCategorie()] -= cantitate;
+    public Produs cautaProdus(int idProdus){
+        for (Produs produs : listaProduse) {
+            if (produs.getId() == idProdus) {
+                return produs;
+            }
+        }
+        System.out.println("Nu am gasit nici un produs cu id = " + idProdus);
+        return null;
     }
+
+    public void stergeProdus(int idProdus) {
+        for (Produs produs : listaProduse) {
+            if (produs.getId() == idProdus) {
+                Produs produsSters = produs;
+                listaProduse.remove(produs);
+                stocProduse[idProdus] = -1;
+                System.out.println("Produsul " + produs.getNume() + "a fost sters cu succes!");
+                return;
+            }
+        }
+        System.out.println("Nu s-a gasit nici un produs cu id = " + idProdus);
+    }
+
 
     public int getCantitateProdus(Produs produs) {
 //        return stocProduse[produs.getId()][produs.getCategorie()];
@@ -77,8 +94,15 @@ public class MagazinOnline implements Serializable{
 
     public static void readDataFromFile(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName)) ) {
-            instance = (MagazinOnline) inputStream.readObject();
-            if (!instance.getListaProduse().isEmpty()) {
+            Object object = inputStream.readObject();
+            if (object instanceof MagazinOnline) {
+                instance = (MagazinOnline) object;
+            }
+            else{
+                System.out.println("Citirea nu a rezultat intr-o instanta MagazinOnline!");
+            }
+
+            if (instance.getListaProduse()!= null && !instance.getListaProduse().isEmpty()) {
                 Produs lastItem = instance.getListaProduse().get(instance.getListaProduse().size() - 1);
 
                 Produs.setUltimulId(lastItem.getId());
@@ -92,7 +116,7 @@ public class MagazinOnline implements Serializable{
 
     public void initialData(){
         this.listaProduse = new ArrayList<Produs>();
-        Produs.setUltimulId(1);
+        Produs.setUltimulId(0);
 
         this.listaProduse.add(new Produs("Laptop", 800.0f));
         this.listaProduse.add(new Produs("Smartphone", 500.0f));

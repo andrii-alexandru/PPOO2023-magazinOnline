@@ -11,7 +11,7 @@ public class Comanda implements Serializable {
     ArrayList<Produs> listaProduse;
 
     public Comanda( LocalDate dataComenda, ArrayList<Produs> listaProduse) {
-        this.id = ultimulId++;
+        this.id = ++ultimulId;
         this.dataComenda = dataComenda;
         this.listaProduse = listaProduse;
     }
