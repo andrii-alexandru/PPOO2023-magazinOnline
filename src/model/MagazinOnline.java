@@ -8,12 +8,10 @@ import java.util.Random;
 public class MagazinOnline implements Serializable{
     static MagazinOnline instance;
     int[] stocProduse;
-    int numarProduse;
     ArrayList<Produs> listaProduse;
 
     private MagazinOnline() {
-        this.numarProduse = 50;
-        this.stocProduse = new int[50];
+        this.stocProduse = new int[10];
         this.listaProduse = new ArrayList<Produs>();
     }
 
@@ -24,20 +22,16 @@ public class MagazinOnline implements Serializable{
         return instance;
     }
 
-    public int[] getstocProduse() {
-        return stocProduse;
+    public int getStocProdus(int position) {
+        if (position >= 0 && position < stocProduse.length) {
+            return stocProduse[position];
+        } else {
+            throw new IndexOutOfBoundsException("Invalid position");
+        }
     }
 
     public void setstocProduse(int[] stocProduse) {
         this.stocProduse = stocProduse;
-    }
-
-    public int getNumarProduse() {
-        return numarProduse;
-    }
-
-    public void setNumarProduse(int numarProduse) {
-        this.numarProduse = numarProduse;
     }
 
     public ArrayList<Produs> getListaProduse() {
@@ -49,7 +43,19 @@ public class MagazinOnline implements Serializable{
     }
 
     public void adaugaProdus(Produs produs, int cantitate) {
-//        stocProduse[produs.getId()][produs.getCategorie()] += cantitate;
+        listaProduse.add(produs);
+
+        int[] newStocProduse = new int[listaProduse.size()];
+
+        for (int i = 0; i < listaProduse.size() - 1; i++) {
+            newStocProduse[i] = stocProduse[i];
+        }
+
+        newStocProduse[listaProduse.size()-1] = cantitate;
+
+        stocProduse = newStocProduse;
+
+        stocProduse[produs.getId()] = cantitate;
     }
 
     public void stergeProdus(Produs produs, int cantitate) {
@@ -61,25 +67,33 @@ public class MagazinOnline implements Serializable{
         return 0;
     }
 
-    public void writeDataToFile(String fileName) {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
+    public static void writeDataToFile(String fileName) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName, false))) {
             outputStream.writeObject(instance);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static MagazinOnline readDataFromFile(String fileName) {
+    public static void readDataFromFile(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName)) ) {
-            return (MagazinOnline) inputStream.readObject();
+            instance = (MagazinOnline) inputStream.readObject();
+            if (!instance.getListaProduse().isEmpty()) {
+                Produs lastItem = instance.getListaProduse().get(instance.getListaProduse().size() - 1);
+
+                Produs.setUltimulId(lastItem.getId());
+                System.out.println("Ultimul id : " + Produs.getUltimulId());
+            }
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public void initialData(){
-        this.numarProduse = 10;
+        this.listaProduse = new ArrayList<Produs>();
+        Produs.setUltimulId(1);
+
         this.listaProduse.add(new Produs("Laptop", 800.0f));
         this.listaProduse.add(new Produs("Smartphone", 500.0f));
         this.listaProduse.add(new Produs("Tablet", 300.0f));
@@ -97,13 +111,16 @@ public class MagazinOnline implements Serializable{
             Produs produs = this.listaProduse.get(i);
             stocProduse[i] = new Random().nextInt(101);
         }
+
+        System.out.println(" ");
+        System.out.println(" s-a resetat lista!");
+        System.out.println(instance.toString());
     }
 
     @Override
     public String toString() {
         return "MagazinOnline{" +
                 "stocProduse=" + Arrays.toString(stocProduse) +
-                ", numarProduse=" + numarProduse +
                 ", listaProduse=" + listaProduse +
                 '}';
     }

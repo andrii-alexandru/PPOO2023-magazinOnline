@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class Produs implements Serializable {
-    static int ultimulId = 0;
+    static int ultimulId = 1;
     int id;
     String nume;
     float pret;
@@ -32,6 +32,14 @@ public class Produs implements Serializable {
 
     public void setPret(float pret) {
         this.pret = pret;
+    }
+
+    public static int getUltimulId() {
+        return ultimulId;
+    }
+
+    public static void setUltimulId(int ultimulId) {
+        Produs.ultimulId = ultimulId;
     }
 
     @Override
