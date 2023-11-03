@@ -26,12 +26,12 @@ Acest proiect utilizeaza resursele si conceptele standard din Java, cum ar fi co
 
 ## Limitari
 
-- Datele sunt stocate temporar in memorie sau in fisiere, ceea ce inseamna ca datele se pot pierde la inchiderea aplicatiei.
-- Nu se realizeaza validarea completa a datelor de intrare, deci trebuie sa fii atent la introducerea datelor corecte.
+- Datele sunt stocate temporar in memorie sau in fisiere, ceea ce inseamna ca datele se pot pierde daca aplicatia nu se inchide corespunzator.
+- Erori la validarea datelor.
 
 ## Contributii
 
-Acest proiect este deschis pentru contributii. Daca doresti sa adaugi functionalitati noi, sa imbunatatesti codul sau sa corectezi probleme, te rugam sa faci un fork al repo-ului nostru si sa incepi sa contribui.
+Acest proiect este deschis pentru contributii. 
 
 ## Autor
 
