@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 public class MagazinOnline implements Serializable{
     static MagazinOnline instance;
@@ -58,6 +59,8 @@ public class MagazinOnline implements Serializable{
     public Produs cautaProdus(int idProdus){
         for (Produs produs : listaProduse) {
             if (produs.getId() == idProdus) {
+                System.out.println("Am gasit produsul: ");
+                System.out.println(produs.toString());
                 return produs;
             }
         }
@@ -78,38 +81,59 @@ public class MagazinOnline implements Serializable{
         System.out.println("Nu s-a gasit nici un produs cu id = " + idProdus);
     }
 
+    public void modificaProdus(int idProdusDeModificat, Produs produsModificat) {
+        int index = -1;
+
+        for (int i = 0; i < listaProduse.size(); i++) {
+            if (listaProduse.get(i).getId() == idProdusDeModificat) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index != -1) {
+            listaProduse.set(index, produsModificat);
+            System.out.println("Produsul cu ID " + idProdusDeModificat + " a fost modificat cu succes.");
+        } else {
+            System.out.println("Nu s-a găsit niciun produs cu ID = " + idProdusDeModificat);
+        }
+    }
+
+
 
     public int getCantitateProdus(Produs produs) {
 //        return stocProduse[produs.getId()][produs.getCategorie()];
         return 0;
     }
 
-    public static void writeDataToFile(String fileName) {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName, false))) {
-            outputStream.writeObject(instance);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void readDataFromFile() {
+        Object object = null;
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("magazin_data.ser")) ) {
+            object = inputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+            System.out.println("eroare citire" + e.getMessage());
         }
-    }
 
-    public static void readDataFromFile(String fileName) {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName)) ) {
-            Object object = inputStream.readObject();
-            if (object instanceof MagazinOnline) {
-                instance = (MagazinOnline) object;
-            }
-            else{
-                System.out.println("Citirea nu a rezultat intr-o instanta MagazinOnline!");
-            }
+        if(object != null){
+            instance = (MagazinOnline) object;
 
             if (instance.getListaProduse()!= null && !instance.getListaProduse().isEmpty()) {
                 Produs lastItem = instance.getListaProduse().get(instance.getListaProduse().size() - 1);
 
                 Produs.setUltimulId(lastItem.getId());
-                System.out.println("Ultimul id : " + Produs.getUltimulId());
             }
+        }
+        else{
+            System.out.println("Magazin gol!");
+        }
 
-        } catch (IOException | ClassNotFoundException e) {
+    }
+
+    public static void writeDataToFile() {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("magazin_data.ser", false))) {
+            outputStream.writeObject(instance);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -137,7 +161,7 @@ public class MagazinOnline implements Serializable{
         }
 
         System.out.println(" ");
-        System.out.println(" s-a resetat lista!");
+        System.out.println("Lista de produse a fost reinitializata!");
         System.out.println(instance.toString());
     }
 
@@ -148,4 +172,6 @@ public class MagazinOnline implements Serializable{
                 ", listaProduse=" + listaProduse +
                 '}';
     }
+
+
 }

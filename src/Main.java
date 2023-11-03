@@ -1,11 +1,10 @@
 import model.MagazinOnline;
 import model.Produs;
+import statistics.Statistic;
 import ui.Menu;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello and welcome!");
-
 //        magazinOnline.initialData();
 
 //        System.out.println(magazinOnline.toString());
@@ -13,13 +12,13 @@ public class Main {
 //        System.out.println(magazinOnline.toString());
 
 
-        MagazinOnline.readDataFromFile("magazin_data.ser");
+        MagazinOnline.readDataFromFile();
+        Statistic.readDataFromFile();
 
         Menu.displayMainMenu();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            MagazinOnline.writeDataToFile("magazin_data.ser");
-        }));
+        MagazinOnline.writeDataToFile();
+        Statistic.writeDataToFile();
     }
 
 
