@@ -20,6 +20,17 @@ Aceasta documentatie ofera o descriere detaliata a aplicatiei "Magazin Online", 
 - **Comanda Produse**: Utilizatorul poate comanda produse din magazin. Produsele pot fi adaugate intr-o lista de comanda utilizand ID-ul produsului.
 - **Efectueaza Comanda**: Dupa ce s-au adaugat produse in comanda, utilizatorul poate finaliza comanda si efectua o achizitie. Astfel, se inregistreaza comanda in statistici.
 
+## Structura a Proiectului <a name="structura-a-proiectului"></a>
+Proiectul este structurat in pachete si include urmatoarele elemente principale:
+
+- **Pachet "models"**: Acesta contine trei clase - `Comanda`, `MagazinOnline`, si `Produs` - care definesc obiectele de lucru ale aplicatiei.
+
+- **Pachet "statistics"**: Contine clasa `Statistic` pentru gestionarea datelor statistice ale aplicatiei.
+
+- **Pachet "ui"**: Aici se afla clasa `Menu` care implementeaza interfata text a aplicatiei.
+
+- **Main.java**: Este fisierul de intrare principal pentru rularea aplicatiei.
+
 ## Resurse
 
 Acest proiect utilizeaza resursele si conceptele standard din Java, cum ar fi colectii de obiecte pentru gestionarea produselor, interactiune cu utilizatorul utilizand clasa `Scanner`, gestionarea datelor in memorie si interfata utilizatorului bazata pe consola.
@@ -27,7 +38,12 @@ Acest proiect utilizeaza resursele si conceptele standard din Java, cum ar fi co
 ## Limitari
 
 - Datele sunt stocate temporar in memorie sau in fisiere, ceea ce inseamna ca datele se pot pierde daca aplicatia nu se inchide corespunzator.
-- Erori la validarea datelor.
+- Erori la validarea datelor introduse de utilizatori.
+  
+Posibile imbunatatiri pentru proiect:
+- Implementarea unui mecanism mai robust de gestionare a exceptiilor.
+- Salvarea datelor intr-o baza de date sau folosind mecanisme de persistenta mai avansate.
+
 
 ## Contributii
 
