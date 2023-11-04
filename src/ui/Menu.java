@@ -93,8 +93,7 @@ public class Menu {
                             if(produsGasit != null){
                                 produseComandate.add(produsGasit);
                                 System.out.println(" ");
-                                System.out.println("Am adaugat acest produs la comanda: ");
-                                System.out.println(produsGasit.toString());
+                                System.out.println("Am adaugat acest produs la comanda.");
                             }
                         } else {
                             String input = scanner.next();

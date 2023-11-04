@@ -36,6 +36,14 @@ public class Comanda implements Serializable {
         this.listaProduse = listaProduse;
     }
 
+    public static int getUltimulId() {
+        return ultimulId;
+    }
+
+    public static void setUltimulId(int ultimulId) {
+        Comanda.ultimulId = ultimulId;
+    }
+
     @Override
     public String toString() {
         return "Comanda{" +

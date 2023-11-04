@@ -52,8 +52,6 @@ public class MagazinOnline implements Serializable{
         newStocProduse[listaProduse.size()-1] = cantitate;
 
         stocProduse = newStocProduse;
-
-        System.out.println("stoc produse: " + stocProduse.toString());
     }
 
     public Produs cautaProdus(int idProdus){
@@ -112,7 +110,7 @@ public class MagazinOnline implements Serializable{
             object = inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
 //            e.printStackTrace();
-            System.out.println("eroare citire" + e.getMessage());
+            System.out.println("eroare citire magazin: " + e.getMessage());
         }
 
         if(object != null){
